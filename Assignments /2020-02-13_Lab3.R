@@ -65,5 +65,10 @@ sanchez <- mutate(sanchez, log(x+1) = log(x+1)(BEETLE96))
 
 
 sanchez <- mutate(sanchez, logbeetle = log(BEETLE96+1))
-                 
-                  
+     
+ggplot(sanchez)+
+  geom_histogram(aes(BEETLE96), binwidth = 2)
+ggplot(sanchez)+
+  geom_histogram(aes(logbeetle), binwidth = 2)
+ggplot(sanchez)+
+  geom_histogram(aes(COLTYPE), binwidth = 2)
