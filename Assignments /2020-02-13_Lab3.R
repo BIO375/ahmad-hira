@@ -83,3 +83,32 @@ ggplot(sanchez)+
   geom_boxplot(aes(x = logbeetle, y = BEETLE96), varwidth = TRUE)
 
 sanchez <- read_csv("datasets/demos/sanchez.csv")
+View(lovett)
+
+summ_root <- lovett %>%
+  summarise(mean_SO4 = mean(SO4),
+            median_SO4 = median(SO4),
+            IQR_SO4 = IQR(SO4),
+            sd_SO4 = sd(SO4),
+            var_SO4 = var(SO4))
+View(summ_root)
+
+summ_root <- lovett %>%
+  summarise(mean_SO4MOD = mean(SO4MOD),
+median_SO4MOD = median(SO4MOD),
+IQR_SO4MOD = IQR(SO4MOD),
+sd_SO4MOD = sd(SO4MOD),
+var_SO4MOD = var(SO4MOD))
+
+View(summ_root)
+
+View(geom_boxplot)
+
+summ_BEETLE96 <- sanchez %>%
+  group_by(COLTYPE) %>%
+  summarise(mean_BEETLE96 = mean(BEETLE96),
+            median_BEETLE96 = median(BEETLE96),
+            IQR_BEETLE96 = IQR(BEETLE96),
+            sd_BEETLE96 = sd(BEETLE96),
+            var_BEETLE96 = var(BEETLE96))
+View(summ_BEETLE96)
