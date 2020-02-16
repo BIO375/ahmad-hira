@@ -72,3 +72,14 @@ ggplot(sanchez)+
   geom_histogram(aes(logbeetle), binwidth = 2)
 ggplot(sanchez)+
   geom_histogram(aes(COLTYPE), binwidth = 2)
+
+ggplot(sanchez)+
+  geom_histogram(aes(BEETLE96), binwidth = 2)
+
+ggplot(sanchez)+
+  geom_histogram(aes(logbeetle), binwidth = 1)
+
+ggplot(sanchez)+
+  geom_boxplot(aes(x = logbeetle, y = BEETLE96), varwidth = TRUE)
+
+sanchez <- read_csv("datasets/demos/sanchez.csv")
