@@ -105,6 +105,7 @@ View(summ_root)
 
 View(geom_boxplot)
 
+
 summ_BEETLE96 <- sanchez %>%
   group_by(COLTYPE) %>%
   summarise(mean_BEETLE96 = mean(BEETLE96),
@@ -114,6 +115,7 @@ summ_BEETLE96 <- sanchez %>%
             var_BEETLE96 = var(BEETLE96))
 View(summ_BEETLE96)
 
+<<<<<<< HEAD:Assignments /2020-02-13_Lab3.R
 summ_root <- lovett %>%
   summarise(mean_DOC = mean(DOC),
             median_DOC = median(DOC),
@@ -129,3 +131,16 @@ summ_root <- lovett %>%
             sd_CL = sd(CL),
             var_CL = var(CL))
 View(summ_root)
+=======
+
+### Advice ####
+# Line 64 breaks because of the = sign in the object name
+# Line 69-80 could be removed, or not, as you please
+# Line 85, not clear why it is there
+# Probably a good idea to not use the name summ_root for both 
+# Don't use view for plots.  Just scroll through the plots using
+# the blue arrows.
+# the untransformed and log-transformed data.
+
+### GRADE 10/10 runs without breaking ####
+>>>>>>> 4df5a365cfcfff665f8be510ca0e3a823a09eb2a:assignments/2020-02-13_Lab3.R
