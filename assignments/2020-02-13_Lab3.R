@@ -48,8 +48,9 @@ lovett_tidy <- lovett %>%
 ggplot(data = lovett_tidy)+
   geom_boxplot(aes(x = type, y = measurement))+
   coord_cartesian(ylim = c(40, 75))+
-  stat_summary(aes(x = type, y = measurement), fun.y=mean, colour="darkred", geom="point", 
+  stat_summary(log10(aes(x = type, y = measurement), fun.y=mean, colour="darkred", geom="point", 
                shape=18, size=3)            
+
 sanchez <- read_csv("datasets/demos/sanchez.csv")
 
 View(sanchez)
@@ -114,6 +115,23 @@ summ_BEETLE96 <- sanchez %>%
             var_BEETLE96 = var(BEETLE96))
 View(summ_BEETLE96)
 
+<<<<<<< HEAD:Assignments /2020-02-13_Lab3.R
+summ_root <- lovett %>%
+  summarise(mean_DOC = mean(DOC),
+            median_DOC = median(DOC),
+            IQR_DOC = IQR(DOC),
+            sd_DOC = sd(DOC),
+            var_DOC = var(DOC))
+lovett <- read_csv("datasets/quinn/chpt2/lovett.csv")
+
+summ_root <- lovett %>%
+  summarise(mean_CL = mean(CL),
+            median_CL = median(CL),
+            IQR_CL = IQR(CL),
+            sd_CL = sd(CL),
+            var_CL = var(CL))
+View(summ_root)
+=======
 
 ### Advice ####
 # Line 64 breaks because of the = sign in the object name
@@ -125,3 +143,4 @@ View(summ_BEETLE96)
 # the untransformed and log-transformed data.
 
 ### GRADE 10/10 runs without breaking ####
+>>>>>>> 4df5a365cfcfff665f8be510ca0e3a823a09eb2a:assignments/2020-02-13_Lab3.R
