@@ -13,3 +13,6 @@ SagebrushCrickets <- read_csv("datasets/abd/chapter13chap13e5SagebrushCrickets.c
 ggplot(chap13e5SagebrushCrickets) +
   geom_histogram(aes(timeToMating), binwidth = 2)+
   facet_wrap(~feedingStatus)
+
+# The reason this failed is because you call the data SagebrushCrickets in line 12 
+# but then call it chap13e5SagebrushCrickets in line 13
