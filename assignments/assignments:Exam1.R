@@ -9,10 +9,16 @@ if(!require(rcompanion)){install.packages("rcompanion")}
 if(!require(summarytools)){install.packages("summarytools")}
 if(!require(tidyverse)){install.packages("tidyverse")}
 
-SagebrushCrickets <- read_csv("datasets/abd/chapter13chap13e5SagebrushCrickets.csv")
-ggplot(chap13e5SagebrushCrickets) +
-  geom_histogram(aes(timeToMating), binwidth = 2)+
+# SagebrushCrickets <- read_csv("datasets/abd/chapter13chap13e5SagebrushCrickets.csv")
+# ggplot(chap13e5SagebrushCrickets) +
+#   geom_histogram(aes(timeToMating), binwidth = 2)+
+#   facet_wrap(~feedingStatus)
+
+SagebrushCrickets <- read_csv("datasets/abd/chapter13/chap13e5SagebrushCrickets.csv")
+ggplot(SagebrushCrickets) +
+  geom_histogram(aes(timeToMating), binwidth = 8)+
   facet_wrap(~feedingStatus)
 
 # The reason this failed is because you call the data SagebrushCrickets in line 12 
 # but then call it chap13e5SagebrushCrickets in line 13
+# also missing a / in the file path
