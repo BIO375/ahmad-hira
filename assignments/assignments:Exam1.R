@@ -39,6 +39,7 @@ ggplot(data = Polyploid)+
                colour="darkred", 
                geom="point", 
                 )
+
   
 
 
