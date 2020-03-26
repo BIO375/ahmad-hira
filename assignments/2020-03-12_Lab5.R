@@ -24,23 +24,35 @@ summary_Obliquity <- ParisObservatoryData %>%
             var_Obliquity = var(Obliquity))
 View(summary_Obliquity)
 
-names(ParisObservatoryData)
-class("Obliquity")
+# names(ParisObservatoryData)
+# class("Obliquity")
 # two-sided
-t.test(ParisObservatoryData[Obliquity])
-rlang::last_error()`    
 
-help("t.test")
+# t.test(ParisObservatoryData[Obliquity])
+# rlang::last_error()`    
+# 
+# help("t.test")
+
+# HIRA, you need the first argument to be the equivalent of 
+# range_shift$elevationalRangeShift instead of "Obliquity".
+
+# In the example below, the data is called range_shift and the variable of interest
+# is called elevationalRangeShift.  The $ sign can be read as "within the dataset
+# range_shift, call the variable named elevationalRangeShift"
+
+# t.test(range_shift$elevationalRangeShift, 
+#        alternative = "two.sided", mu = 0, conf.level = 0.95)
 
 t.test("Obliquity", mu = 0, alternative = "two.sided", conf.level = 0.95)
 
-View(t.test_Obliquity)
 
-t.test("Obliquity", y = NULL,
-       alternative = c("two.sided"),
-       mu = 0, paired = FALSE, var.equal = FALSE,
-       conf.level = 0.95).
-View(t.test_Obliquity)
+# View(t.test_Obliquity)
+# 
+# t.test("Obliquity", y = NULL,
+#        alternative = c("two.sided"),
+#        mu = 0, paired = FALSE, var.equal = FALSE,
+#        conf.level = 0.95).
+# View(t.test_Obliquity)
 
 HeartAttack <- read_csv("datasets/demos/HeartAttack_short.csv")
 
