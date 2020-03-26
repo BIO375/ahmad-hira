@@ -16,7 +16,28 @@ ParisObservatoryData <- read_csv("assignments/ParisObservatoryData.csv")
 
 View(ParisObservatoryData)
 
-#two-sided
-t.test(ParisObservatoryData)
- 
+summary_Obliquity <- ParisObservatoryData %>%
+  summarise(mean_Obliquity = mean(Obliquity),
+            median_Obliquity = median(Obliquity),
+            IQR_Obliquity = IQR(Obliquity),
+            sd_Obliquity = sd(Obliquity),
+            var_Obliquity = var(Obliquity))
+View(summary_Obliquity)
 
+names(ParisObservatoryData)
+class("Obliquity")
+# two-sided
+t.test(ParisObservatoryData[Obliquity])
+rlang::last_error()`    
+
+help("t.test")
+
+t.test("Obliquity", mu = 0, alternative = "two.sided", conf.level = 0.95)
+
+View(t.test_Obliquity)
+
+t.test("Obliquity", y = NULL,
+       alternative = c("two.sided"),
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95)
+View(t.test_Obliquity)
