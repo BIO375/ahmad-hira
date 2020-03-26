@@ -39,5 +39,14 @@ View(t.test_Obliquity)
 t.test("Obliquity", y = NULL,
        alternative = c("two.sided"),
        mu = 0, paired = FALSE, var.equal = FALSE,
-       conf.level = 0.95)
+       conf.level = 0.95).
 View(t.test_Obliquity)
+
+HeartAttack <- read_csv("datasets/demos/HeartAttack_short.csv")
+
+View(HeartAttack)
+
+ggplot(HeartAttack) +
+  geom_histogram(aes(cholest), binwidth = 10)+
+  facet_wrap(~group)
+
