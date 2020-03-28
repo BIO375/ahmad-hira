@@ -81,6 +81,19 @@ View(ratio)
 heart <- read_csv("datasets/demos/HeartAttack_short.csv", col_types = cols(group = col_character()))
 
 #two sample 2-sided t-test
-t.test(HeartAttack$cholest~HeartAttack$group, col_types = cols(group = col_character, alternative = "two.sided" , conf.level = 0.95))
+t.test(HeartAttack$cholest~HeartAttack$group,data = HeartAttack, var.equal = TRUE, alternative = "two.sided" , conf.level = 0.95)
 
+read_csv("datasets/quinn/chpt3/furness.csv")
+View("datasets/quinn/chpt3/furness.csv")
 
+wilcox.test(furness$METRATE~furness$SEX,data = furness, var.equal = TRUE, alternative = "two.sided" , conf.level = 0.95)
+
+read_csv("datasets/quinn/chpt3/elgar.csv")
+View("elgar")
+
+ratio <- (max(elgar$HORIZDIM))/(min(elgar$HORIZLIG))
+View(ratio)
+
+#Welch's t test 
+
+t.test(elgar$HORIZDIM~elgar$HORIZLIG, data = elgar, alternative = "two.sided" , conf.level = 0.95)
