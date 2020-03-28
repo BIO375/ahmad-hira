@@ -54,6 +54,9 @@ t.test("Obliquity", mu = 0, alternative = "two.sided", conf.level = 0.95)
 #        conf.level = 0.95).
 # View(t.test_Obliquity)
 
+t.test(ParisObservatoryData$Obliquity, 
+        alternative = "two.sided", mu = 0, conf.level = 0.95)
+    
 HeartAttack <- read_csv("datasets/demos/HeartAttack_short.csv")
 
 View(HeartAttack)
@@ -62,3 +65,14 @@ ggplot(HeartAttack) +
   geom_histogram(aes(cholest), binwidth = 10)+
   facet_wrap(~group)
 
+summary_cholest <- HeartAttack %>%
+  summarise(mean_cholest = mean(cholest),
+            median_cholest = median(cholest),
+            IQR_cholest = IQR(cholest),
+            sd_cholest = sd(cholest),
+            var_cholest = var(cholest))
+
+View(summary_cholest)
+
+heart <- read_csv("datasets/demos/HeartAttack_short.csv", col_types = cols(group = col_character()))
+t.test(HeartAttack~cholest, col_types = cols(group = col_character , var.equal = TRUE, alternative = "two.sided" , conf.level= 0.95))
