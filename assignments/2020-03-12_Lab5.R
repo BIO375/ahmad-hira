@@ -74,5 +74,9 @@ summary_cholest <- HeartAttack %>%
 
 View(summary_cholest)
 
+ratio <- (max(HeartAttack$cholest))/(min(HeartAttack$cholest))
+
+View(ratio)
+
 heart <- read_csv("datasets/demos/HeartAttack_short.csv", col_types = cols(group = col_character()))
 t.test(HeartAttack~cholest, col_types = cols(group = col_character , var.equal = TRUE, alternative = "two.sided" , conf.level= 0.95))
