@@ -89,11 +89,30 @@ View("datasets/quinn/chpt3/furness.csv")
 wilcox.test(furness$METRATE~furness$SEX,data = furness, var.equal = TRUE, alternative = "two.sided" , conf.level = 0.95)
 
 read_csv("datasets/quinn/chpt3/elgar.csv")
-View("elgar")
+View(elgar.csv)
 
 ratio <- (max(elgar$HORIZDIM))/(min(elgar$HORIZLIG))
 View(ratio)
 
-#Welch's t test 
+#Paired t-test, first check if symmetrical using boxplot
 
-t.test(elgar$HORIZDIM~elgar$HORIZLIG, data = elgar, alternative = "two.sided" , conf.level = 0.95)
+
+ggplot(data = elgar)+
+  geom_boxplot(aes(x = HORIZLIG, y = HORIZDIM), notch = TRUE)+
+  stat_summary(aes(x = HORIZLIG, y = HORIZDIM), 
+               fun.y=mean, 
+               colour="darkred", 
+               geom="point", 
+               shape=18, 
+               size=3)
+
+t.test(elgar$HORIZDIM, 
+       alternative = "two.sided", mu = 0, conf.level = 0.95)
+
+t.test(elgar$HORIZLIG,
+      elgar$HORIZDIM,
+       paired=TRUE,
+       conf.level=0.95)
+
+
+
