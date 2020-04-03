@@ -45,13 +45,37 @@ ggplot(chap13q20SalmonColor) +
 
 #Overall, it looks pretty normal but the S ratio was above 3 which means I cannot assume normality so I will perform a transformation to the data
 
-t.test(SockeyeSalmonData$`Skin Colour`~SockeyeSalmonData$Species,data = SockeyeSalmonData, var.equal = TRUE, alternative = "two.sided" , conf.level = 0.95)
+t.test(chap13q20SalmonColor$skinColor~SockeyeSalmonData$Species,data = SockeyeSalmonData, var.equal = TRUE, alternative = "two.sided" , conf.level = 0.95)
 
-## use log transformation 
+## do log transformation to salmon colour data 
 
 chap13q20SalmonColor <- chap13q20SalmonColor %>%
   mutate(log1Salmon = log(skinColor + 1))
 
+chap13q20SalmonColor_summary02 <- chap13q20SalmonColor %>%
+  group_by(species) %>%
+  summarise(n_log1Salmon = n(),
+            mean_log1Salmon = mean(log1Salmon),
+            median_log1beetle = median(log1Salmon),
+            sd_log1Salmon = sd(log1Salmon),
+            IQR_log1Salmon = IQR(log1Salmon),
+            var_log1Salmon = var(log1Salmon),
+            se_log1Salmon = sd(log1Salmon)/sqrt(n()))
+
+# Boxplots of log + 1 transformed Salmon skin colour grouped by species
+ggplot(data = chap13q20SalmonColor)+
+  geom_boxplot(aes(x = species, y = log1Salmon), notch = TRUE)+
+  stat_summary(aes(x = species, y = log1Salmon), 
+               fun.y=mean, 
+               colour="darkred", 
+               geom="point", 
+               shape=18, 
+               size=3)
+
+ratio <-(max(summ_log1Salmon$sd_log1Salmon))/(min(summ_log1Salmon$sd_log1Salmon))
+
+View(ratio)
+# The log transformation does not seem to have 
 
 ##Chapter 13 problem number 25 
 
