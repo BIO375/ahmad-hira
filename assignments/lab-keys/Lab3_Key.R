@@ -79,7 +79,6 @@ sanchez_summary01 <- sanchez %>%
             IQR_BEETLE96 = IQR(BEETLE96),
             var_BEETLE96 = var(BEETLE96),
             se_BEETLE96 = sd(BEETLE96)/sqrt(n()))
-
 # Add a log transformed beetle density.  We need to add 1, because
 # log(0) is undefined
 
