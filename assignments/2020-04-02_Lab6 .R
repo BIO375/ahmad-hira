@@ -79,7 +79,7 @@ View(ratio)
 
 t.test(chap13q20SalmonColor$log1Salmon~chap13q20SalmonColor$species,data = chap13q20SalmonColor, var.equal = TRUE, alternative = "two.sided" , conf.level = 0.95)
 
-# The p-value has decreased which means blah blah..... 
+# The p-value has decreased which means transformation has increased the significance of the data..... 
 
 ###Chapter 13 problem number 25 
 
@@ -133,11 +133,102 @@ View(ratio)
 #ratio is less than 3 so check boxplot for normality 
 
 ggplot(data = chap13q26ZebraFinchBeaks)+
-  geom_boxplot(aes(group_by(biomassChange)), notch = TRUE)+
-  stat_summary(aes(x = biomassChange, y = biomassChange), 
+  geom_boxplot(aes(preference), notch = FALSE)+
+  stat_summary(aes(x= 1-15, y = preference), 
                fun= mean, 
                colour="darkred", 
                geom="point", 
                shape=18, 
                size=3)
+#boxplot whisker length is not equal and there is a significant outlier, median and mean are close. The assumptions of normality are not met and sample size is pretty small, so I will try a transformation to the data. 
+
+chap13q26ZebraFinchBeaks <- chap13q26ZebraFinchBeaks %>%
+  mutate(log1FinchBeaks = log(preference + 1))
+
+chap13q26ZebraFinchBeaks_summary02 <- chap13q26ZebraFinchBeaks %>%
+  summarise(n_log1FinchBeaks= n(),
+            mean_log1FinchBeaks = mean(log1FinchBeaks),
+            median_log1FinchBeaks = median(log1FinchBeaks),
+            sd_log1FinchBeaks = sd(log1FinchBeaks),
+            IQR_log1FinchBeaks = IQR(log1FinchBeaks),
+            var_log1FinchBeaks = var(log1FinchBeaks),
+            se_log1FinchBeaks = sd(log1FinchBeaks)/sqrt(n()))
+View(chap13q26ZebraFinchBeaks_summary02)
+
+##transformed ratio of smax/smin 
+
+ratio <-(max(chap13q26ZebraFinchBeaks_summary02$sd_log1FinchBeaks))/(min(chap13q26ZebraFinchBeaks_summary02$sd_log1FinchBeaks))
+View(ratio <-(max(chap13q26ZebraFinchBeaks_summary02$sd_log1FinchBeaks))/(min(chap13q26ZebraFinchBeaks_summary02$sd_log1FinchBeaks)))
+
+
+##transformed boxplot 
+
+ggplot(data = chap13q26ZebraFinchBeaks)+
+  geom_boxplot(aes(log1FinchBeaks), notch = FALSE)+
+  stat_summary(aes(x= 1-20, y = log1FinchBeaks), 
+               fun= mean, 
+               colour="darkred", 
+               geom="point", 
+               shape=18, 
+               size=3)
+
+## whisker lengths are equal after transformation and mean and median are exact so I will go ahead and perform a one sample t test because we are comparing the mean of a single group
+
+t.test(chap13q26ZebraFinchBeaks, alternative = "two.sided", mu = 0, conf.level = 0.95)
+
+##P is less than 0.05 which means there is a significant difference between the females preference for carotenoid supplemented males 
+
+### Review number 16 on page 421 
+
+library(readr)
+chap03q22ZebraFishBoldness <- read_csv("datasets/abd/chapter03/chap03q22ZebraFishBoldness.csv")
+View(chap03q22ZebraFishBoldness)
+
+## test for normality before conducting t test 
+
+ggplot(chap03q22ZebraFishBoldness) +
+  geom_boxplot(aes(x = genotype, y = secondsAggressiveActivity))
+
+##whisker length isn't equal for either genotype but median and mean are close, check histograms 
+
+ggplot(chap03q22ZebraFishBoldness) +
+  geom_histogram(aes(secondsAggressiveActivity), binwidth = 10)+
+  facet_wrap(~genotype)
+
+summ_chap03q22ZebraFishBoldness <- chap03q22ZebraFishBoldness %>%
+  summarise(mean_secondsAggresiveActivity = mean(secondsAggressiveActivity),
+            sd_secondsAggressiveActivity = sd(secondsAggressiveActivity),
+            n_secondsAggressiveActivity = n())
+
+View(summ_chap03q22ZebraFishBoldness)
+
+## histogram is bimodal rather than unimodal so I will check smax/smin ratio 
+
+ratio <-(max(summ_chap03q22ZebraFishBoldness$sd_secondsAggressiveActivity))/(min(summ_chap03q22ZebraFishBoldness$sd_secondsAggressiveActivity))
+View(ratio)
+
+# ratio is less than 3 and sample size is not super large so I will conduct a non-parametric version of the t-test and do a mann Whitney U t test 
+
+wilcox.test(secondsAggressiveActivity ~ genotype,
+            data = chap03q22ZebraFishBoldness, alternative = "two.sided", conf.level = 0.95)
+
+t.test(chap03q22ZebraFishBoldness$secondsAggressiveActivity~chap03q22ZebraFishBoldness$genotype,data = chap03q22ZebraFishBoldness, alternative = "two.sided" , conf.level = 0.95)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
