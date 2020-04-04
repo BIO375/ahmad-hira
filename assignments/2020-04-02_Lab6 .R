@@ -12,7 +12,7 @@ if(!require(tidyverse)){install.packages("tidyverse")}
 # Check for updates
 tidyverse_update()
 
-##Chapter 13 problem number 20 
+###Chapter 13 problem number 20 
 
 #a) two methods that would be appropriate to test whether there was a difference in mean skin colour between the groups
 #- 
@@ -45,8 +45,6 @@ ggplot(chap13q20SalmonColor) +
 
 #Overall, it looks pretty normal but the S ratio was above 3 which means I cannot assume normality so I will perform a transformation to the data
 
-t.test(chap13q20SalmonColor$skinColor~SockeyeSalmonData$Species,data = SockeyeSalmonData, var.equal = TRUE, alternative = "two.sided" , conf.level = 0.95)
-
 ## do log transformation to salmon colour data 
 
 chap13q20SalmonColor <- chap13q20SalmonColor %>%
@@ -62,6 +60,8 @@ chap13q20SalmonColor_summary02 <- chap13q20SalmonColor %>%
             var_log1Salmon = var(log1Salmon),
             se_log1Salmon = sd(log1Salmon)/sqrt(n()))
 
+View(chap13q20SalmonColor_summary02)
+
 # Boxplots of log + 1 transformed Salmon skin colour grouped by species
 ggplot(data = chap13q20SalmonColor)+
   geom_boxplot(aes(x = species, y = log1Salmon), notch = TRUE)+
@@ -72,19 +72,72 @@ ggplot(data = chap13q20SalmonColor)+
                shape=18, 
                size=3)
 
-ratio <-(max(summ_log1Salmon$sd_log1Salmon))/(min(summ_log1Salmon$sd_log1Salmon))
+ratio <-(max(chap13q20SalmonColor_summary02$sd_log1Salmon))/(min(chap13q20SalmonColor_summary02$sd_log1Salmon))
 
 View(ratio)
-# The log transformation does not seem to have 
+# The log transformation brought down the SMax/Smin ratio to 3.23 instead of 4.29 so I decided to conduct a 2 sample t test 
 
-##Chapter 13 problem number 25 
+t.test(chap13q20SalmonColor$log1Salmon~chap13q20SalmonColor$species,data = chap13q20SalmonColor, var.equal = TRUE, alternative = "two.sided" , conf.level = 0.95)
 
-library(readxl)
-RainforestBiomass <- read_excel("RainforestBiomass.xlsx")
-View(RainforestBiomass)
+# The p-value has decreased which means blah blah..... 
 
-install.packages(c("tibble", "xml2"))
+###Chapter 13 problem number 25 
 
+library(readr)
+chap13q25Clearcuts <- read_csv("datasets/abd/chapter13/chap13q25Clearcuts.csv")
+View(chap13q25Clearcuts)
 
+summ_chap13q25Clearcuts <- chap13q25Clearcuts %>%
+  summarise(mean_biomassChange = mean(biomassChange),
+            sd_biomassChange = sd(biomassChange),
+            n_biomassChange = n())
+View(summ_chap13q25Clearcuts)
 
+##ratio of Smax/Smin 
+ratio <-(max(summ_chap13q25Clearcuts$sd_biomassChange))/(min(summ_chap13q25Clearcuts$sd_biomassChange))
+View(ratio)
+
+##ratio is less than 3 so I will look at normality of histograms and boxplot 
+
+ggplot(data = chap13q25Clearcuts)+
+  geom_boxplot(aes(x = biomassChange, y = biomassChange), notch = TRUE)+
+  stat_summary(aes(x = biomassChange, y = biomassChange), 
+               fun= mean, 
+               colour="darkred", 
+               geom="point", 
+               shape=18, 
+               size=3)
+ggplot(chap13q25Clearcuts) +
+  geom_histogram(aes(biomassChange), binwidth = 1)
+
+## the histogram shows a bit of left skew however overall and I will assume normalcy and conduct a one sample t-test 
+
+t.test(chap13q25Clearcuts, alternative = "two.sided", mu = 0, conf.level = 0.95)
+
+### CHAPTER 13 PROBLEM 26
+
+library(readr)
+chap13q26ZebraFinchBeaks <- read_csv("datasets/abd/chapter13/chap13q26ZebraFinchBeaks.csv")
+View(chap13q26ZebraFinchBeaks)
+
+summ_chap13q26ZebraFinchBeaks <- chap13q26ZebraFinchBeaks %>%
+  summarise(mean_preference = mean(preference),
+            sd_preference = sd(preference),
+            n_preference = n())
+View(summ_chap13q26ZebraFinchBeaks)
+
+##ratio of Smax/Smin 
+ratio <-(max(summ_chap13q26ZebraFinchBeaks$sd_preference))/(min(summ_chap13q26ZebraFinchBeaks$sd_preference))
+View(ratio)
+
+#ratio is less than 3 so check boxplot for normality 
+
+ggplot(data = chap13q26ZebraFinchBeaks)+
+  geom_boxplot(aes(group_by(biomassChange)), notch = TRUE)+
+  stat_summary(aes(x = biomassChange, y = biomassChange), 
+               fun= mean, 
+               colour="darkred", 
+               geom="point", 
+               shape=18, 
+               size=3)
 
