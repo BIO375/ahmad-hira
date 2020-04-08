@@ -114,5 +114,16 @@ t.test(elgar$HORIZLIG,
        paired=TRUE,
        conf.level=0.95)
 
+###GRADE 8/10####
+# In line 91, you are missing the first part that assigns the name elgar to the data
+# it should read
+elgar <- read_csv("datasets/quinn/chpt3/elgar.csv")
+
+# In line 94, you should do not need to calculate the ratio because it is not relevant;
+# the only assumptions of the paired t-test are that differences are a random sample and 
+# that differences are normally distributed
+
+# In line 100, you should be plotting the differenceS, diff = HORIZDIM - HORIZLIG.
+
 
 
