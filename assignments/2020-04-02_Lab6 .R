@@ -12,10 +12,12 @@ if(!require(tidyverse)){install.packages("tidyverse")}
 # Check for updates
 tidyverse_update()
 
+install.packages("lubridate")
+
 ###Chapter 13 problem number 20 
 
 #a) two methods that would be appropriate to test whether there was a difference in mean skin colour between the groups
-#- 
+#- Welch's t test 
 #- Two sample t test 
 
 #b) use a transformation to test whether there is a difference in the means of these two groups skin colours 
