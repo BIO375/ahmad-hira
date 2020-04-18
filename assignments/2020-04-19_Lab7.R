@@ -22,6 +22,7 @@ library("tidyverse")
 # Check for updates
 tidyverse_update()
 
+install.packages("purrr")
 install.packages("xml2")
 
 
@@ -242,17 +243,28 @@ summ_Aldrin <- Jaffe %>%
 ##Log transformation for Aldrin concentration 
 
 Jaffe <- Jaffe %>%
-  mutate(log1Aldrin = log(Aldrin= 1))
+  mutate(log1Ald = log(Aldrin + 1))
+View(Jaffe)
+summ_log1Ald <- Jaffe %>%
+  summarise(n_log1Ald= n(),
+            mean_log1Ald = mean(log1Ald),
+            median_log1Ald = median(log1Ald),
+            sd_log1Ald = sd(log1Ald),
+            IQR_log1Ald = IQR(log1Ald),
+            var_log1Ald = var(log1Ald),
+            se_log1Ald = sd(log1Ald)/sqrt(n()))
 
-Jaffe_summary02 <- chap13q26ZebraFinchBeaks %>%
-  summarise(n_log1FinchBeaks= n(),
-            mean_log1FinchBeaks = mean(log1FinchBeaks),
-            median_log1FinchBeaks = median(log1FinchBeaks),
-            sd_log1FinchBeaks = sd(log1FinchBeaks),
-            IQR_log1FinchBeaks = IQR(log1FinchBeaks),
-            var_log1FinchBeaks = var(log1FinchBeaks),
-            se_log1FinchBeaks = sd(log1FinchBeaks)/sqrt(n()))
+model03 <- lm(log1Ald~Depth, data = Jaffe)
+#ratio for transformed aldrin is < 3 (1)
+ratio <-(max(summ_log1Ald$sd_log1Ald))/(min(summ_log1Ald$sd_log1Ald))
 
+autoplot(model03)
+
+anova(model03)
+
+
+
+##sUMMARY FOR HCB untransformed 
 summ_HCB <- Jaffe %>%
   group_by(Depth) %>% 
   summarise(mean_HCB = mean(HCB),
@@ -297,28 +309,24 @@ summary(model02)
 
 ### Multiple Comparisons ####
 
-# Earlier you installed and loaded the package multcomp.  To do planned comparisons
-# we will use a function in multcomp called glht, short for general linear
-# hypotheses.
-# linfct specifies the linear hypotheses to be tested, I find the easiest way
-# is to specify by name
 
 # Planned comparisons
 
-planned <- glht(model01, linfct = 
-                  mcp(Depth = c("Surface- Aldrin = 0",
-                                   "Middepth- Aldrin = 0",
-                                   "Bottom- Aldrin = 0")))
+plannedAld <- glht(model01, linfct = 
+                  mcp(Depth = c("Surface- Middepth = 0",
+                                   "Bottom- Middepth = 0",
+                                   "Bottom- Surface = 0")))
 confint(planned)
 summary(planned)
 
 # Unplanned comparisons
 # The key things you need to specify here are the model name and the factor name
 
-tukey <- glht(model01, linfct = mcp(parasite = "Tukey"))
+tukey <- glht(model01, linfct = mcp(Dep = "Tukey"))
 summary(tukey)
 
 ### Multiple Comparisons if package "multcomp" fails ####
-model01_b <- aov(growth.rate ~ parasite, daphnia)
-TukeyHSD(model01_b)
+model01 <- aov(Aldrin ~ Depth, Jaffe)
+TukeyHSD(model01)x
+
 
