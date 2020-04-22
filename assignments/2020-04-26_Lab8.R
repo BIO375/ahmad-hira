@@ -109,5 +109,62 @@ library(readr)
 chap15q26MalariaFungusVenom <- read_csv("datasets/abd/chapter15/chap15q26MalariaFungusVenom.csv")
 View(chap15q26MalariaFungusVenom)
 
+ggplot(chap15q26MalariaFungusVenom, aes(x = treatmentGroup, y = logSporozoiteNumbers))+
+  geom_boxplot() +
+  theme_bw() +
+  coord_flip()
+ggplot(chap15q26MalariaFungusVenom) +
+  geom_histogram(aes(logSporozoiteNumbers), binwidth = 1)+
+  facet_wrap(~treatmentGroup)
+ggplot(chap15q26MalariaFungusVenom)+
+  geom_qq(aes(sample = logSporozoiteNumbers, color = treatmentGroup))
+
+## a) the pattern suggested is that the control group has the highest number of infectious cells of malaria on average, 
+# whereas, the scorpine treatment group seems to have the lowest average number of infectious cells of malaria between all three groups. 
+
+# B) I think the best test for this data is an unplanned comparison and use of the Tukey-Kramer method after determining that the null of no differences between any of the groups has been rejected.  
+
+
+chap15q26MalariaFungusVenom<- chap15q26MalariaFungusVenom%>%
+  mutate(treatmentGroup = fct_recode(treatmentGroup, Control = "Control",
+                              WT = "WT",
+                              Scorpine = "Scorpine"
+  ))
+
+##Construct ANOVA 
+
+modelMalaria <- lm(logSporozoiteNumbers~treatmentGroup, data = chap15q26MalariaFungusVenom)
+
+summ_logSporozoiteNumbers <- chap15q26MalariaFungusVenom %>%
+  group_by(treatmentGroup) %>% 
+  summarise(mean_logSporozoiteNumbers = mean(logSporozoiteNumbers),
+            sd_logSporozoiteNumbers = sd(logSporozoiteNumbers),
+            n_logSporozoiteNumbers = n())
+ratio <-(max(summ_logSporozoiteNumbers$sd_logSporozoiteNumbers))/(min(summ_logSporozoiteNumbers$sd_logSporozoiteNumbers))
+
+# The function autoplot will give you a residuals by predicte plot, which is 
+# called "Residuals vs. Fitted" here.  It also gives you a Q-Q plot of the RESIDUALS.
+
+autoplot(modelMalaria)
+
+### Interpret results 
+
+
+anova(modelMalaria)
+
+# Start with a summary of the model results
+summary(modelMalaria)
+
+
+# Unplanned comparisons
+# The key things you need to specify here are the model name and the factor name
+
+tukey <- glht(modelMalaria, linfct = mcp(treatmentGroup = "Tukey"))
+summary(tukey)
+
+# The tukey-kramer test shows that there is a significant difference between the Scorpine- Control group and the Wild Type-Scorpine group which means the null hypothesis is false. 
+
+
+
 
 
