@@ -164,6 +164,102 @@ summary(tukey)
 
 # The tukey-kramer test shows that there is a significant difference between the Scorpine- Control group and the Wild Type-Scorpine group which means the null hypothesis is false. 
 
+### Problem 15-30 and/or 15-31 (same data in both problems) ####
+# Use the data to perform the correct test.  Please show code for all steps in your process.
+
+#a) 
+library(readr)
+chap15q30FiddlerCrabFans <- read_csv("datasets/abd/chapter15/chap15q30FiddlerCrabFans.csv")
+View(chap15q30FiddlerCrabFans)
+
+
+ggplot(chap15q30FiddlerCrabFans, aes(x = crabType, y = bodyTemperature))+
+  geom_boxplot() +
+  theme_bw() +
+  coord_flip()
+ggplot(chap15q30FiddlerCrabFans) +
+  geom_histogram(aes(bodyTemperature), binwidth = 0.1)+
+  facet_wrap(~crabType)
+ggplot(chap15q30FiddlerCrabFans)+
+  geom_qq(aes(sample = bodyTemperature, color = crabType))
+
+
+summ_bodyTemperature <- chap15q30FiddlerCrabFans %>%
+  group_by(crabType) %>% 
+  summarise(mean_bodyTemperature = mean(bodyTemperature),
+            sd_bodyTemperature = sd(bodyTemperature),
+            n_bodyTemperature = n())
+ratio <-(max(summ_bodyTemperature$sd_bodyTemperature))/(min(summ_bodyTemperature$sd_bodyTemperature))
+
+#assumptions of normality are not met, boxplots whisker length is pretty unequal and there are multiple outliers, a bit of left skew in the histograms, and a strange looking q-q plot. 
+
+#try to transform the data 
+
+chap15q30FiddlerCrabFans <- chap15q30FiddlerCrabFans %>%
+  mutate(log1crab = log(bodyTemperature + 1))
+
+summ_log1crab <- chap15q30FiddlerCrabFans %>%
+  group_by(crabType) %>% 
+  summarise(mean_log1crab = mean(log1crab),
+            sd_log1crab = sd(log1crab),
+            n_log1crab = n())
+
+##Graphs of transformed crab data 
+ggplot(chap15q30FiddlerCrabFans) +
+  geom_histogram(aes(log1crab), binwidth = 0.1)+
+  facet_wrap(~crabType)
+
+ggplot(data = chap15q30FiddlerCrabFans)+
+  geom_boxplot(aes(x = crabType, y = log1crab), notch = TRUE)+
+  stat_summary(aes(x = crabType, y = log1crab), 
+               fun.y=mean, 
+               colour="darkred", 
+               geom="point", 
+               shape=18, 
+               size=3)
+ratio <-(max(summ_log1crab$sd_log1crab))/(min(summ_log1crab$sd_log1crab))
+
+# It is important to read in the predictor as a factor
+# In the case of this dataset, the parasite names have a space so I recoded
+# the factor levels using the function fct_recode()
+
+
+chap15q30FiddlerCrabFans <- chap15q30FiddlerCrabFans %>%
+  mutate(crabType = fct_recode(crabType, intact = "intact male",
+                               maleminor = "male minor removed",
+                               malemajor = "male major removed"
+  ))
+
+##Construct ANOVA 
+
+modeltransformedcrab <- lm(log1crab~crabType, data = chap15q30FiddlerCrabFans)
+
+# The function autoplot will give you a residuals by predicte plot, which is 
+# called "Residuals vs. Fitted" here.  It also gives you a Q-Q plot of the RESIDUALS.
+
+autoplot(modeltransformedcrab)
+
+### Interpret results for transformed crabs 
+
+
+anova(modeltransformedcrab)
+
+# Start with a summary of the model results for transformed crabs
+summary(modeltransformedcrab)
+
+
+# Planned comparisons between three groups
+
+
+planned <- glht(modeltransformedcrab, linfct = 
+                  mcp(crabType = c("intact male - male major removed = 0",
+                                  "male minor removed - intact male = 0",
+                                  "male major removed - male minor removed = 0")))
+
+
+
+confint(planned)
+summary(planned)
 
 
 
