@@ -244,6 +244,9 @@ autoplot(modeltransformedcrab)
 
 anova(modeltransformedcrab)
 
+#There are significant differences between the body temperatures of the various crab types as indicated by p<0.001 in the ANOVA results 
+
+
 # Start with a summary of the model results for transformed crabs
 summary(modeltransformedcrab)
 
