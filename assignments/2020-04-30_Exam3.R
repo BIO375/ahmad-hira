@@ -40,6 +40,14 @@ ggplot(caffeine)+
 ggplot(caffeine) +
   geom_boxplot(aes(x = group, y = half_life))
 
+# It is important to read in the predictor as a factor
+# In the case of this dataset, the parasite names have a space so I recoded
+# the factor levels using the function fct_recode()
+caffeine<- caffeine%>%
+  mutate(group = fct_recode(group, male = "male",
+                              norm_prog = "norm_prog",
+                              high_prog = "high_prog"))
+                              
 ##mean and median match, whiskers have a skew and there are two outliers but overall seems like a normal distribution so not going to transform data
 
 #####Constructing ANOVA#####
@@ -60,15 +68,18 @@ anova(caffeinemodel)
 
 
 
-# Start with a summary of the model results 
+#planned comparision
+
 summary(caffeinemodel)
 
-#####Tukey-Kramer Honestly Significant Difference#####
+View(caffeinemodel)
 
-tukey <- glht(caffeinemodel, linfct = mcp(group = "Tukey"))
-
-
-summary(tukey)
+planned <- glht(caffeinemodel, linfct = 
+                  mcp(group = c("male - norm_prog = 0",
+                                  "norm_prog - high_prog = 0",
+                                  "male - high_prog = 0")))
+confint(planned)
+summary(planned)
 
 
 
