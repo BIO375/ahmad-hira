@@ -156,15 +156,14 @@ ggplot(data = insulation)+
   geom_point(aes(x = leanness, y= resid(modelinsulation08)))
 
 # So all the diagnostic plots are not bad--the residual the normal Q-Q  is definitely linear,
-# and the residual by x plot is not fan shaped. So we do not need to transform 
-iris <- iris %>%
-  mutate(sqrt_grains = sqrt(grainsDeposited))
-model03<-lm(sqrt_grains ~ tubeLengthMm, data = iris)
-ggplot(data = iris)+
-  geom_point(aes(x = tubeLengthMm, y= resid(model03)))
+# and the residual by x plot is not fan shaped. So we do not need to transform
+insulation <- insulation %>%
+  mutate(sqrt_heat_loss = sqrt(heat_loss))
+model03<-lm(sqrt_leanness~ leanness, data = insulation)
+ggplot(data = insulation)+
+  geom_point(aes(x = leanness, y= resid(modelinsulation08)))
 
-# That is much better.  Now we can look at the statistical results!
-summary(model03)
+summary(modelinsulation08)
 
 # Irises with longer tubes have significantly greater number of pollen 
 # grains deposited by long-proboscid flies(Linear regression: 
